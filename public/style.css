@@ -47,16 +47,8 @@ table {
 	border-spacing: 0;
 }
 
-
-      html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
-      #map {
-        padding:0;
-      }
-      #status {
-        background-color: black; 
-        color: white; 
-        padding: 3px; 
-        border: solid 1px white;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-      }
+.mapcolumn {
+	padding: 0;
+	border-right: 1px solid #abb1a9;
+	height: 100%;
+}
