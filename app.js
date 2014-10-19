@@ -85,6 +85,10 @@ app.get('/position', function(req, res) {
       });
     }
 
+    hit.rent = parseInt(hit.rent);
+    hit.price = parseInt(hit.price);
+
+
     // street has an owner
     if (hit.name in streets) {
       var owner = streets[hit.name];
