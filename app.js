@@ -85,8 +85,8 @@ app.get('/position', function(req, res) {
       });
     }
 
-    console.dir(hit);
-
+    hit.rent = parseInt(hit.rent);
+    hit.price = parseInt(hit.rent);
 
 
     // street has an owner
