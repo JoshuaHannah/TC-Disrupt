@@ -82,7 +82,7 @@
         		}
         		if(res.msg == 'BOUGHT'){
         			$('.noactions').hide();
-        			$('.feedlist').prepend('<li>You bought <i>'+res.street+'</i>.</li>');
+        			$('.feedlist').prepend.fadeIn('<li>You bought <i>'+res.street+'</i>.</li>');
         		}
         		if(res.msg == 'GAME OVER'){
         			$('.noactions').hide();
@@ -105,8 +105,7 @@
         	}).done(function(res){
         		console.log(res);
         		data.datasets[0].data = [res['Taimur'].money, res['Lukas'].money, res['Josh'].money, res['Lewis'].money];
-        		ctx = document.getElementById("myChart").getContext("2d");
-				myBarChart = new Chart(ctx).Line(data);
+        		myBarChart.update();
 
 				['Taimur','Lukas','Josh','Lewis'].forEach(function(username2){
 
@@ -212,9 +211,11 @@
 
 	<img class="logo" src="logo.png">
 
+	<h1>Real Life Edition</h1>
+
 	<div class="players">
 
-		<h3>Money Stats</h3>
+		<h3><span class="glyphicon glyphicon-gbp"></span> Money Stats</h3>
 
 		<canvas id="myChart" width="260" height="200"></canvas>
 
@@ -222,9 +223,21 @@
 
 	<div class="feed">
 
-		<h3>Your Actions</h3>
+		<h3><span class="glyphicon glyphicon-th-list"></span> Your Actions</h3>
 
 		<span class="feedlist"><span class="noactions"><i>No actions yet</i></span></span>
+
+	</div>
+
+	<div class="rules">
+
+	<h3><span class="glyphicon glyphicon-ok"></span> Rules</h3>
+
+	If you enter an unowned property and can afford it, you automatically buy it.
+
+	If you enter an owned property, you pay rent to its owner. 
+
+	If you are unable to pay owed rent, you lose the game.
 
 	</div>
 
