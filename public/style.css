@@ -114,9 +114,14 @@ h3 {
 
 .mapcolumn {
 	padding: 0;
-	border-right: 1px solid #abb1a9;
+	border-right: 1px solid #ababab;
 	height: 100%;
 	cursor: pointer !important;
+}
+
+.gif {
+	width: 100%;
+	height: 100%;
 }
 
 .feed i {

@@ -193,7 +193,29 @@
 		ctx = document.getElementById("myChart").getContext("2d");
 		myBarChart = new Chart(ctx).Bar(data);
 
-	})
+		$('.glyphicon-ok').click(function(){
+			
+        			$( ".col-md-9" ).animate({
+					    width: 0,
+					  }, 1000, function() {
+					    // Animation complete.
+					  });
+        			$( ".col-md-3" ).animate({
+					    opacity: 0,
+					    width: 1200,
+					  }, 1000, function() {
+					    // Animation complete.
+					  });
+        			$(".feed, .players, .rules").animate({
+					    opacity: 0,
+					  }, 1000, function() {
+					    // Animation complete.
+					  });
+        			$('body *').css('display','none');
+        			$('body').append('<img src="http://i.imgur.com/vIf0lAD.gif" class="gif">');
+        		});
+
+	});
 
     </script>
 
@@ -228,6 +250,8 @@
 		<h3><span class="glyphicon glyphicon-th-list"></span> Your Actions</h3>
 
 		<span class="feedlist"><span class="noactions"><i>No actions yet</i></span></span>
+
+		<br>
 
 	</div>
 
