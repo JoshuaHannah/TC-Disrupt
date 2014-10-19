@@ -170,6 +170,6 @@ app.get('/position', function(req, res) {
 // curl -X POST "http://localhost:3333/login?email=lukas@test.de&password=12345678"
 
 
-var server = app.listen(3333, function() {
+var server = app.listen(process.env.PORT || 3333, function() {
   console.log('Listening on port %d', server.address().port);
 });
