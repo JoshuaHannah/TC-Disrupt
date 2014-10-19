@@ -9,10 +9,10 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 
 var players = {
-  'Taimur': {money: 2500, color: 0, pos: []},
-  'Josh': {money: 2500, color: 1, pos: []},
-  'Lewis': {money: 2500, color: 2, pos: []},
-  'Lukas': {money: 2500, color: 3, pos: []}
+  'Taimur': {money: 1500, color: 0, pos: [[-0.067403,51.516961]]},
+  'Josh': {money: 1500, color: 1, pos: [[-0.067403,51.526961]]},
+  'Lewis': {money: 1500, color: 2, pos: [-0.067503,51.516961]},
+  'Lukas': {money: 1500, color: 3, pos: [-0.067403,51.516991]}
 };
 
 var streets = {};
@@ -85,6 +85,8 @@ app.get('/position', function(req, res) {
       });
     }
 
+
+
     // street has an owner
     if (hit.name in streets) {
       var owner = streets[hit.name];
@@ -117,6 +119,26 @@ app.get('/position', function(req, res) {
     }
     // buy
     else {
+      if (hit.name === 'Jail') {
+        for (s in streets) {
+          if (streets[s] === username) {
+            streets[s] = undefined;
+            return res.jsonp({
+              msg: 'OK'
+            });
+          }
+        }
+        return res.jsonp({
+          msg: 'OK'
+        });
+      }
+      else if (hit.name === 'Free Parking') {
+        // TODO get random street
+        return res.jsonp({
+          msg: 'OK'
+        });
+      }
+
       if (player.money < hit.price) {
         return res.jsonp({
           msg: 'OK'
