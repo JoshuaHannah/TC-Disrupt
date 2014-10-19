@@ -92,9 +92,11 @@
         			$('.noactions').hide();
         			$('.feedlist').prepend('<li>You had to pay £'+res.amount+' for landing on <i>'+res.street+'</i>.</li>');
         		}
-        	})
+        	});   	
 
-        	setInterval(function(){
+        });
+
+        setInterval(function(){
 
         		$.ajax({
         		type: 'GET',
@@ -124,13 +126,9 @@
 
 				});
 
-        	}), 1000;
+        	});
 
-        	})
-
-        	
-
-        });
+        	}, 1000);
  
         function addFeatureLayer() {
                         var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
