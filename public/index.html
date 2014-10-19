@@ -8,6 +8,7 @@
 
 <!--JS-->
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="chart.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <!--CSS-->
@@ -23,12 +24,47 @@
 		 //dojo.require("esri.layers.WebTiledLayer");
 		 //wtl = esri.layers.WebTiledLayer;
 
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	  vars[key] = value;
+	});
+
+	var username = vars['username'];
+
+	var data = {
+    labels: ["Taimur", "Lukas", "Josh", "Lewis"],
+    datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [1500,1500,1500,1500]
+        }
+    ]
+};
+
 	 var map;
-	 var point;
 	 var coords;
 	 var symbol;
+	 var point;
 	 var layer;
 	 var graphic;
+	 var symbol2;
+	 var point2;
+	 var layer2;
+	 var graphic2;
+	 var symbol3;
+	 var point3;
+	 var layer3;
+	 var graphic3;
+	 var symbol4;
+	 var point4;
+	 var layer4;
+	 var graphic4;
+	 var myBarChart;
+	 var ctx;
        
  
         require(["esri/map", "esri/Color", "esri/graphic",  "esri/layers/FeatureLayer","esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/renderers/UniqueValueRenderer"],
@@ -45,24 +81,39 @@
         map.on("click", function(event){
         	layer.remove(graphic);
         	coords = esri.geometry.webMercatorToGeographic(event.mapPoint);
+
         	$.ajax({
         		type: 'GET',
         		url: '/position',
-        		data: {username: 'Taimur', lng: coords.x, lat: coords.y},
+        		data: {username: username, lng: coords.x, lat: coords.y},
         	}).done(function(res){
         		if(res.msg == 'OK'){
 
         		}
         		if(res.msg == 'BOUGHT'){
-        			$('.feed').append('You bought '+res.street+'.<br>');
+        			$('.noactions').hide();
+        			$('.feedlist').prepend('<li>You bought <i>'+res.street+'</i>.</li>');
         		}
         		if(res.msg == 'GAME OVER'){
-
+        			$('.feedlist').prepend('You ran out of money!');
         		}
-        		if(res.msg == 'PAID RENT'){
-        			$('.feed').append('You had to pay '+res.amount+ 'for landing on '+res.street+'.');
+        		if(res.msg == 'PAYED RENT'){
+        			$('.feed').append('<ul>You had to pay '+res.amount+ 'for landing on '+res.street+'.</ul>');
         		}
         	})
+
+        	$.ajax({
+        		type: 'GET',
+        		url: '/data',
+        		data: {},
+        	}).done(function(res){
+        		console.log(res);
+        		data.datasets[0].data = [res['Taimur'].money, res['Lukas'].money, res['Josh'].money, res['Lewis'].money];
+        		console.log(data.datasets[0].data);
+        		ctx = document.getElementById("myChart").getContext("2d");
+				myBarChart = new Chart(ctx).Bar(data);
+        	})
+
         	point = new esri.geometry.Point(coords.x,coords.y);
         	graphic = new esri.Graphic(point, symbol);
         	layer.add(graphic);
@@ -79,6 +130,7 @@
                           renderer.addValue("brown", new SimpleFillSymbol().setColor(new Color([97, 73, 0, 0.7])));
                           renderer.addValue("orange", new SimpleFillSymbol().setColor(new Color([236, 139, 44, 0.7])));
                           renderer.addValue("yellow", new SimpleFillSymbol().setColor(new Color([255, 240, 4, 0.7])));
+                          renderer.addValue("red", new SimpleLineSymbol().setColor(new Color([219, 36, 39, 1])));
                           renderer.addValue("red", new SimpleFillSymbol().setColor(new Color([219, 36, 39, 0.7])));
                           renderer.addValue("green", new SimpleFillSymbol().setColor(new Color([0, 129, 59, 0.7])));
                           renderer.addValue("purple", new SimpleFillSymbol().setColor(new Color([97, 0, 86, 0.7])));
@@ -99,8 +151,39 @@
 						layer.add(graphic);
 						map.addLayer(layer);
 
+						point2 = new esri.geometry.Point(-0.1299583,51.509029);
+						point2 = esri.geometry.geographicToWebMercator(point);
+						symbol2 = new esri.symbol.PictureMarkerSymbol("icon-2.png", 26, 26);
+						graphic2 = new esri.Graphic(point, symbol);
+						layer2 = new esri.layers.GraphicsLayer();
+						layer2.add(graphic2);
+						map.addLayer(layer2);
+
+						point3 = new esri.geometry.Point(-0.1299583,51.509029);
+						point3 = esri.geometry.geographicToWebMercator(point);
+						symbol3 = new esri.symbol.PictureMarkerSymbol("icon-3.png", 26, 26);
+						graphic3 = new esri.Graphic(point, symbol);
+						layer3 = new esri.layers.GraphicsLayer();
+						layer3.add(graphic3);
+						map.addLayer(layer3);
+
+						point4 = new esri.geometry.Point(-0.1299583,51.509029);
+						point4 = esri.geometry.geographicToWebMercator(point);
+						symbol4 = new esri.symbol.PictureMarkerSymbol("icon-4.png", 26, 26);
+						graphic4 = new esri.Graphic(point, symbol);
+						layer4 = new esri.layers.GraphicsLayer();
+						layer4.add(graphic4);
+						map.addLayer(layer4);
+
        
       });
+
+	$(document).ready(function(){
+
+		ctx = document.getElementById("myChart").getContext("2d");
+		myBarChart = new Chart(ctx).Bar(data);
+
+	})
 
     </script>
 
@@ -122,13 +205,17 @@
 
 	<div class="players">
 
-		<h3>Players</h3><br>
+		<h3>Money Stats</h3>
+
+		<canvas id="myChart" width="260" height="200"></canvas>
 
 	</div>
 
 	<div class="feed">
 
-		<h3>Feed</h3><br>
+		<h3>Your Actions</h3>
+
+		<span class="feedlist"><span class="noactions"><i>No actions yet</i></span></span>
 
 	</div>
 
