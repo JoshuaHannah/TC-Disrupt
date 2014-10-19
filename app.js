@@ -100,6 +100,7 @@ app.get('/position', function(req, res) {
       // pay rent
       if (player.money < hit.rent) {
         players[owner].money += player.money;
+        player.money = 0;
         // game over
         player.game_over = true;
         for (var s in streets) {
