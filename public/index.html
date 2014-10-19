@@ -43,7 +43,7 @@
             data: [1500,1500,1500,1500]
         }
     ]
-};
+	};
 
 	 var map;
 	 var coords;
@@ -106,14 +106,13 @@
         		console.log(res);
         		data.datasets[0].data = [res['Taimur'].money, res['Lukas'].money, res['Josh'].money, res['Lewis'].money];
         		ctx = document.getElementById("myChart").getContext("2d");
-				myBarChart = new Chart(ctx).Bar(data);
+				myBarChart = new Chart(ctx).Line(data);
 
 				['Taimur','Lukas','Josh','Lewis'].forEach(function(username2){
 
 					console.log(username2);
 
-					var len = res[username2].pos.length;
-					var	coords2 = res[username2].pos[len-1].reverse();
+					var	coords2 = res[username2].pos.reverse();
 
 					console.log(coords2);
 
