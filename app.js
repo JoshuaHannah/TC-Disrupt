@@ -85,7 +85,7 @@ app.get('/position', function(req, res) {
       });
     }
 
-    // pay rent
+    // street has an owner
     if (hit.name in streets) {
       var owner = streets[hit.name];
       if (owner === username) {
@@ -93,6 +93,7 @@ app.get('/position', function(req, res) {
           msg: 'OK'
         });
       }
+      // pay rent
       if (player.money < hit.rent) {
         players[owner].money += player.money;
         // game over
@@ -109,8 +110,9 @@ app.get('/position', function(req, res) {
       players[owner].money += hit.rent;
       player.money -= hit.rent;
       return res.jsonp({
-        msg: 'PAYED RENT',
-        amount: hit.rent
+        msg: 'PAID RENT',
+        amount: hit.rent,
+        street: hit.name
       });
     }
     // buy
@@ -120,7 +122,7 @@ app.get('/position', function(req, res) {
           msg: 'OK'
         });
       }
-      streets[hit.name] = player.name;
+      streets[hit.name] = username;
       player.money -= hit.price;
       return res.jsonp({
         msg: 'BOUGHT',
