@@ -64,6 +64,12 @@ table {
 	text-align: center;
 }
 
+path {
+	stroke: rgb(255,245,220);
+  stroke-width: 1pt;
+  stroke-opacity: 0.35;
+}
+
 .players, .feed {
 	margin: 0 auto;
 	margin-top: 40px;
