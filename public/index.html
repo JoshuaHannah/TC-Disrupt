@@ -95,9 +95,11 @@
         			$('.feedlist').prepend('<li>You bought <i>'+res.street+'</i>.</li>');
         		}
         		if(res.msg == 'GAME OVER'){
+        			$('.noactions').hide();
         			$('.feedlist').prepend('You ran out of money!');
         		}
         		if(res.msg == 'PAID RENT'){
+        			$('.noactions').hide();
         			$('.feedlist').prepend('<li>You had to pay £'+res.amount+' for landing on <i>'+res.street+'</i>.</li>');
         		}
         	})
@@ -112,12 +114,20 @@
         		console.log(data.datasets[0].data);
         		ctx = document.getElementById("myChart").getContext("2d");
 				myBarChart = new Chart(ctx).Bar(data);
-        	})
 
-        	point = new esri.geometry.Point(coords.x,coords.y);
-        	graphic = new esri.Graphic(point, symbol);
-        	layer.add(graphic);
-			map.addLayer(layer);
+				for(var username in ['Taimur','Lukas','Josh','Lewis']){
+
+					var	coords = [res[username].pos.slice(-1)[0][0], res[username].pos.slice(-1)[0][1]];
+
+					point[username] = new esri.geometry.Point(coords[0],coords[1]);
+		        	graphic[username] = new esri.Graphic(point[username], symbol[username]);
+		        	layer.add(graphic[username]);
+					map.addLayer(layer[username]);
+
+				}
+
+        	});
+
         });
  
         function addFeatureLayer() {
@@ -143,37 +153,37 @@
                          map.addLayer(featureLayer);
                          }
 
-                        point = new esri.geometry.Point(-0.1299583,51.509029);
-						point = esri.geometry.geographicToWebMercator(point);
-						symbol = new esri.symbol.PictureMarkerSymbol("icon-1.png", 26, 26);
-						graphic = new esri.Graphic(point, symbol);
-						layer = new esri.layers.GraphicsLayer();
-						layer.add(graphic);
-						map.addLayer(layer);
+                        point['Taimur'] = new esri.geometry.Point(-0.1299583,51.509029);
+						point['Taimur'] = esri.geometry.geographicToWebMercator(point);
+						symbol['Taimur'] = new esri.symbol.PictureMarkerSymbol("icon-1.png", 26, 26);
+						graphic['Taimur'] = new esri.Graphic(point['Taimur'], symbol['Taimur']);
+						layer['Taimur'] = new esri.layers.GraphicsLayer();
+						layer['Taimur'].add(graphic['Taimur']);
+						map.addLayer(layer['Taimur']);
 
-						point2 = new esri.geometry.Point(-0.1299583,51.509029);
-						point2 = esri.geometry.geographicToWebMercator(point);
-						symbol2 = new esri.symbol.PictureMarkerSymbol("icon-2.png", 26, 26);
-						graphic2 = new esri.Graphic(point, symbol);
-						layer2 = new esri.layers.GraphicsLayer();
-						layer2.add(graphic2);
-						map.addLayer(layer2);
+						point['Lukas'] = new esri.geometry.Point(-0.1299583,51.509029);
+						point['Lukas'] = esri.geometry.geographicToWebMercator(point);
+						symbol['Lukas'] = new esri.symbol.PictureMarkerSymbol("icon-2.png", 26, 26);
+						graphic['Lukas'] = new esri.Graphic(point['Lukas'], symbol['Lukas']);
+						layer['Lukas'] = new esri.layers.GraphicsLayer();
+						layer['Lukas'].add(graphic['Lukas']);
+						map.addLayer(layer['Lukas']);
 
-						point3 = new esri.geometry.Point(-0.1299583,51.509029);
-						point3 = esri.geometry.geographicToWebMercator(point);
-						symbol3 = new esri.symbol.PictureMarkerSymbol("icon-3.png", 26, 26);
-						graphic3 = new esri.Graphic(point, symbol);
-						layer3 = new esri.layers.GraphicsLayer();
-						layer3.add(graphic3);
-						map.addLayer(layer3);
+						point['Josh'] = new esri.geometry.Point(-0.1299583,51.509029);
+						point['Josh'] = esri.geometry.geographicToWebMercator(point);
+						symbol['Josh'] = new esri.symbol.PictureMarkerSymbol("icon-3.png", 26, 26);
+						graphic['Josh'] = new esri.Graphic(point['Josh'], symbol['Josh']);
+						layer['Josh'] = new esri.layers.GraphicsLayer();
+						layer['Josh'].add(graphic['Josh']);
+						map.addLayer(layer['Josh']);
 
-						point4 = new esri.geometry.Point(-0.1299583,51.509029);
-						point4 = esri.geometry.geographicToWebMercator(point);
-						symbol4 = new esri.symbol.PictureMarkerSymbol("icon-4.png", 26, 26);
-						graphic4 = new esri.Graphic(point, symbol);
-						layer4 = new esri.layers.GraphicsLayer();
-						layer4.add(graphic4);
-						map.addLayer(layer4);
+						point['Lewis'] = new esri.geometry.Point(-0.1299583,51.509029);
+						point['Lewis'] = esri.geometry.geographicToWebMercator(point);
+						symbol['Lewis'] = new esri.symbol.PictureMarkerSymbol("icon-4.png", 26, 26);
+						graphic['Lewis'] = new esri.Graphic(point['Lewis'], symbol['Lewis']);
+						layer['Lewis'] = new esri.layers.GraphicsLayer();
+						layer['Lewis'].add(graphic['Lewis']);
+						map.addLayer(layer['Lewis']);
 
        
       });
