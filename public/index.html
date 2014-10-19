@@ -24,9 +24,14 @@
 		 //wtl = esri.layers.WebTiledLayer;
 
 	 var map;
+	 var point;
+	 var coords;
+	 var symbol;
+	 var layer;
+	 var graphic;
        
  
-        require(["esri/map",  "esri/Color", "esri/graphic",  "esri/layers/FeatureLayer","esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/renderers/UniqueValueRenderer"],
+        require(["esri/map", "esri/Color", "esri/graphic",  "esri/layers/FeatureLayer","esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/renderers/UniqueValueRenderer"],
         function( Map, Color, Graphic, FeatureLayer, SimpleLineSymbol, SimpleFillSymbol, UniqueValueRenderer) {
                
         map = new Map("map", {
@@ -35,7 +40,34 @@
           zoom: 15
         });
 
-                map.on("load", addFeatureLayer);
+        map.on("load", addFeatureLayer);
+
+        map.on("click", function(event){
+        	layer.remove(graphic);
+        	coords = esri.geometry.webMercatorToGeographic(event.mapPoint);
+        	$.ajax({
+        		type: 'GET',
+        		url: '/position',
+        		data: {username: 'Taimur', lng: coords.x, lat: coords.y},
+        	}).done(function(res){
+        		if(res.msg == 'OK'){
+
+        		}
+        		if(res.msg == 'BOUGHT'){
+        			$('.feed').append('You bought '+res.street+'.<br>');
+        		}
+        		if(res.msg == 'GAME OVER'){
+
+        		}
+        		if(res.msg == 'PAID RENT'){
+        			$('.feed').append('You had to pay '+res.amount+ 'for landing on '+res.street+'.');
+        		}
+        	})
+        	point = new esri.geometry.Point(coords.x,coords.y);
+        	graphic = new esri.Graphic(point, symbol);
+        	layer.add(graphic);
+			map.addLayer(layer);
+        });
  
         function addFeatureLayer() {
                         var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
@@ -55,11 +87,18 @@
                           renderer.addValue("black", new SimpleFillSymbol().setColor(new Color([0, 0, 0, 0.7])));
                                
                                
-                               
-                               
                           featureLayer.setRenderer(renderer);
                          map.addLayer(featureLayer);
                          }
+
+                        point = new esri.geometry.Point(-0.1299583,51.509029);
+						point = esri.geometry.geographicToWebMercator(point);
+						symbol = new esri.symbol.PictureMarkerSymbol("icon-1.png", 26, 26);
+						graphic = new esri.Graphic(point, symbol);
+						layer = new esri.layers.GraphicsLayer();
+						layer.add(graphic);
+						map.addLayer(layer);
+
        
       });
 
@@ -83,7 +122,13 @@
 
 	<div class="players">
 
-		<h3>Players</h3>
+		<h3>Players</h3><br>
+
+	</div>
+
+	<div class="feed">
+
+		<h3>Feed</h3><br>
 
 	</div>
 
