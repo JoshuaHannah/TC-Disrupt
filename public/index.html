@@ -12,68 +12,97 @@
 
 <!--CSS-->
 <link rel="stylesheet" href="http://js.arcgis.com/3.11/dijit/themes/claro/claro.css">
+<link href='http://fonts.googleapis.com/css?family=Cabin:400,400italic' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="http://js.arcgis.com/3.11/esri/css/esri.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="style.css">
 
 <script>var dojoConfig = {parseOnLoad: true};</script>
-<script src="http://js.arcgis.com/3.11/"></script>
-<script>
+    <script src="http://js.arcgis.com/3.11/"></script>
+    <script>
+		 //dojo.require("esri.layers.WebTiledLayer");
+		 //wtl = esri.layers.WebTiledLayer;
 
-	dojo.require("dijit.layout.BorderContainer");
-    dojo.require("dijit.layout.ContentPane");
-    dojo.require("esri.map");
-    dojo.require("esri.layers.FeatureLayer");
-    dojo.require("dijit.form.CheckBox");
-    
-    var map, featureLayer;
-    var featureLayerUrl = "http://services.arcgis.com/XCbo5t7BF3Awl0lX/arcgis/rest/services/MonopolyStreets/FeatureServer/0";
-    //var featureLayerUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Petroleum/KSPetro/MapServer/1";
-    // streets , osm , oceans , gray
-    function init() {
-      map = new esri.Map("map", {
-        basemap: "topo",
-        center: [-0.1275,51.507222],
-        zoom: 13
+	 var map;
+	 var point;
+	 var coords;
+	 var symbol;
+	 var layer;
+	 var graphic;
+       
+ 
+        require(["esri/map", "esri/Color", "esri/graphic",  "esri/layers/FeatureLayer","esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/renderers/UniqueValueRenderer"],
+        function( Map, Color, Graphic, FeatureLayer, SimpleLineSymbol, SimpleFillSymbol, UniqueValueRenderer) {
+               
+        map = new Map("map", {
+          center:[-0.1299583,51.509029],
+                  basemap: "gray",
+          zoom: 15
+        });
+
+        map.on("load", addFeatureLayer);
+
+        map.on("click", function(event){
+        	layer.remove(graphic);
+        	coords = esri.geometry.webMercatorToGeographic(event.mapPoint);
+        	$.ajax({
+        		type: 'GET',
+        		url: '/position',
+        		data: {username: 'Taimur', lng: coords.x, lat: coords.y},
+        	}).done(function(res){
+        		if(res.msg == 'OK'){
+
+        		}
+        		if(res.msg == 'BOUGHT'){
+        			$('.feed').append('You bought '+res.street+'.<br>');
+        		}
+        		if(res.msg == 'GAME OVER'){
+
+        		}
+        		if(res.msg == 'PAID RENT'){
+        			$('.feed').append('You had to pay '+res.amount+ 'for landing on '+res.street+'.');
+        		}
+        	})
+        	point = new esri.geometry.Point(coords.x,coords.y);
+        	graphic = new esri.Graphic(point, symbol);
+        	layer.add(graphic);
+			map.addLayer(layer);
+        });
+ 
+        function addFeatureLayer() {
+                        var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
+                          defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
+                         // https://a.tiles.mapbox.com/v4/tcdisrupt.k04hc88j/page.html?access_token=pk.eyJ1IjoidGNkaXNydXB0IiwiYSI6Ind2RjdORGcifQ.EMT4hNFxEd5cwWg1mro7Mw#15/51.5137/-0.0844
+                         var renderer = new UniqueValueRenderer(defaultSymbol, "colour");      
+                         
+                          var featureLayer = new FeatureLayer("http://services.arcgis.com/XCbo5t7BF3Awl0lX/arcgis/rest/services/MonopolyStreets/FeatureServer/0", { mode: FeatureLayer.MODE_ONDEMAND, outFields: ["colour"] })
+                          renderer.addValue("brown", new SimpleFillSymbol().setColor(new Color([97, 73, 0, 0.7])));
+                          renderer.addValue("orange", new SimpleFillSymbol().setColor(new Color([236, 139, 44, 0.7])));
+                          renderer.addValue("yellow", new SimpleFillSymbol().setColor(new Color([255, 240, 4, 0.7])));
+                          renderer.addValue("red", new SimpleFillSymbol().setColor(new Color([219, 36, 39, 0.7])));
+                          renderer.addValue("green", new SimpleFillSymbol().setColor(new Color([0, 129, 59, 0.7])));
+                          renderer.addValue("purple", new SimpleFillSymbol().setColor(new Color([97, 0, 86, 0.7])));
+                          renderer.addValue("blue", new SimpleFillSymbol().setColor(new Color([0, 102, 164, 0.7])));
+                          renderer.addValue("pink", new SimpleFillSymbol().setColor(new Color([197, 56, 132, 0.7])));
+                          renderer.addValue("black", new SimpleFillSymbol().setColor(new Color([0, 0, 0, 0.7])));
+                               
+                               
+                          featureLayer.setRenderer(renderer);
+                         map.addLayer(featureLayer);
+                         }
+
+                        point = new esri.geometry.Point(-0.1299583,51.509029);
+						point = esri.geometry.geographicToWebMercator(point);
+						symbol = new esri.symbol.PictureMarkerSymbol("icon-1.png", 26, 26);
+						graphic = new esri.Graphic(point, symbol);
+						layer = new esri.layers.GraphicsLayer();
+						layer.add(graphic);
+						map.addLayer(layer);
+
+       
       });
 
-      map.on("load", mapLoaded);
-
-      map.on("update-start", function(){
-        esri.show(dojo.byId("status"));
-      });
-
-      map.on("update-end", function(){
-        esri.hide(dojo.byId("status"));
-      });
-    }
-
-    function mapLoaded() {
-      featureLayer = new esri.layers.FeatureLayer(featureLayerUrl);
-
-      featureLayer.on("update-start", function(){
-        dojo.style(dojo.byId("status"), "display", "");
-      });
-      featureLayer.on("update-end", function(){
-        dojo.style(dojo.byId("status"), "display", "none");
-      });
-      
-      map.addLayers([featureLayer]);
-    }
-    
-    function toggleLayer(val){
-      if(val.name === 'checkBM'){
-        var basemap = map.getLayer(map.layerIds[0]);
-        basemap.visible ? basemap.hide(): basemap.show();
-      } else {
-        featureLayer.visible ? featureLayer.hide():featureLayer.show();
-      }
-    }
-    
-    dojo.ready(init);
-
-
-</script>
+    </script>
 
 </head>
 
@@ -83,12 +112,25 @@
 
 <div class="col-md-9 mapcolumn">
 
-<iframe class="mapbox" width='100%' height='100%' frameBorder='0' src='https://a.tiles.mapbox.com/v4/tcdisrupt.k04hc88j/attribution,zoompan,zoomwheel,geocoder,share.html?access_token=pk.eyJ1IjoidGNkaXNydXB0IiwiYSI6Ind2RjdORGcifQ.EMT4hNFxEd5cwWg1mro7Mw'></iframe>
+<div id="map" class="map"></div>
 
 </div>
 
-<div class="col-md-3">
-	
+<div class="col-md-3 optionscolumn">
+
+	<img class="logo" src="logo.png">
+
+	<div class="players">
+
+		<h3>Players</h3><br>
+
+	</div>
+
+	<div class="feed">
+
+		<h3>Feed</h3><br>
+
+	</div>
 
 </div>
 
