@@ -85,6 +85,10 @@ app.get('/position', function(req, res) {
       });
     }
 
+    hit.rent = parseInt(hit.rent);
+    hit.price = parseInt(hit.price);
+
+
     // street has an owner
     if (hit.name in streets) {
       var owner = streets[hit.name];
@@ -96,11 +100,12 @@ app.get('/position', function(req, res) {
       // pay rent
       if (player.money < hit.rent) {
         players[owner].money += player.money;
+        player.money = 0;
         // game over
         player.game_over = true;
         for (var s in streets) {
           if (streets[s] === username) {
-            street[s] = undefined;
+            streets[s] = undefined;
           }
         }
         return res.jsonp({
