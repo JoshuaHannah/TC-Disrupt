@@ -9,10 +9,10 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 
 var players = {
-  'Taimur': {money: 1500, color: 0, pos: [[-0.067403,51.516961]]},
-  'Josh': {money: 1500, color: 1, pos: [[-0.067403,51.526961]]},
-  'Lewis': {money: 1500, color: 2, pos: [[-0.067503,51.516961]]},
-  'Lukas': {money: 1500, color: 3, pos: [[-0.067403,51.516991]]}
+  'Taimur': {money: 1500, color: 0, pos: [-0.067403,51.516961]},
+  'Josh': {money: 1500, color: 1, pos: [-0.067403,51.526961]},
+  'Lewis': {money: 1500, color: 2, pos: [-0.067503,51.516961]},
+  'Lukas': {money: 1500, color: 3, pos: [-0.067403,51.516991]}
 };
 
 var streets = {};
@@ -71,7 +71,7 @@ app.get('/position', function(req, res) {
     });
   }
 
-  player.pos.push([lat, lng]);
+  player.pos = [lat, lng];
   isInPoly(lat, lng, function(hit) {
     if (!hit) {
       player.last_hit = undefined;
@@ -84,6 +84,8 @@ app.get('/position', function(req, res) {
         msg: 'OK'
       });
     }
+
+    console.dir(hit);
 
 
 
