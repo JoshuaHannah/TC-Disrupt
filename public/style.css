@@ -123,6 +123,10 @@ h3 {
 	font-style: italic;
 }
 
+.players b {
+	font-weight: 800;
+}
+
 .glyphicon {
 	font-size: 0.8em;
 	margin-right: 10px;

@@ -13,7 +13,7 @@
 
 <!--CSS-->
 <link rel="stylesheet" href="http://js.arcgis.com/3.11/dijit/themes/claro/claro.css">
-<link href='http://fonts.googleapis.com/css?family=Cabin:400,400italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Cabin:400,400italic,500,600,700,800' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="http://js.arcgis.com/3.11/esri/css/esri.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="style.css">
@@ -36,8 +36,8 @@
     datasets: [
         {
             label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
+            fillColor: "rgba(200,235,200,0.75)",
+            strokeColor: "rgba(180,215,180,1)",
             highlightFill: "rgba(220,220,220,0.75)",
             highlightStroke: "rgba(220,220,220,1)",
             data: [1500,1500,1500,1500]
@@ -104,6 +104,7 @@
         		data: {},
         	}).done(function(res){
         		console.log(res);
+        		$('.currentmoney').html(res[username].money);
         		data.datasets[0].data = [res['Taimur'].money, res['Lukas'].money, res['Josh'].money, res['Lewis'].money];
         		ctx = document.getElementById("myChart").getContext("2d");
 				myBarChart = new Chart(ctx).Bar(data);
@@ -212,13 +213,13 @@
 
 	<img class="logo" src="logo.png">
 
-	<h1>Real Life Edition</h1>
-
 	<div class="players">
 
 		<h3><span class="glyphicon glyphicon-gbp"></span> Money Stats</h3>
 
 		<canvas id="myChart" width="260" height="200"></canvas>
+
+		<center>You have <b>£<span class="currentmoney">1500</span></b> right now.</center>
 
 	</div>
 
