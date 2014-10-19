@@ -97,8 +97,8 @@
         		if(res.msg == 'GAME OVER'){
         			$('.feedlist').prepend('You ran out of money!');
         		}
-        		if(res.msg == 'PAYED RENT'){
-        			$('.feed').append('<li>You had to pay '+res.amount+ 'for landing on '+res.street+'.</li>');
+        		if(res.msg == 'PAID RENT'){
+        			$('.feedlist').prepend('<li>You had to pay '+res.amount+ 'for landing on '+res.street+'.</li>');
         		}
         	})
 
