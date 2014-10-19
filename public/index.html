@@ -94,7 +94,9 @@
         		}
         	})
 
-        	$.ajax({
+        	setInterval(function(){
+
+        		$.ajax({
         		type: 'GET',
         		url: '/data',
         		data: {},
@@ -113,7 +115,7 @@
 
 					console.log(coords2);
 
-		        		layer[username2].remove(graphic[username2]);
+		        	layer[username2].remove(graphic[username2]);
 		        	
 					point[username2] = new esri.geometry.Point(coords2[0],coords2[1]);
 		        	graphic[username2] = new esri.Graphic(point[username2], symbol[username2]);
@@ -122,7 +124,11 @@
 
 				});
 
-        	});
+        	}), 1000;
+
+        	})
+
+        	
 
         });
  
