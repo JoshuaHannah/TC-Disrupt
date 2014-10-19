@@ -82,7 +82,7 @@
         		}
         		if(res.msg == 'BOUGHT'){
         			$('.noactions').hide();
-        			$('.feedlist').prepend.fadeIn('<li>You bought <i>'+res.street+'</i>.</li>');
+        			$('.feedlist').prepend('<li>You bought <i>'+res.street+'</i>.</li>');
         		}
         		if(res.msg == 'GAME OVER'){
         			$('.noactions').hide();
@@ -105,7 +105,8 @@
         	}).done(function(res){
         		console.log(res);
         		data.datasets[0].data = [res['Taimur'].money, res['Lukas'].money, res['Josh'].money, res['Lewis'].money];
-        		myBarChart.update();
+        		ctx = document.getElementById("myChart").getContext("2d");
+				myBarChart = new Chart(ctx).Bar(data);
 
 				['Taimur','Lukas','Josh','Lewis'].forEach(function(username2){
 
