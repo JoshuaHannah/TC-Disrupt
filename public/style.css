@@ -71,12 +71,19 @@ table {
 	width: 80%;
 	padding-bottom: 20px;
 	border-bottom: 1px solid rgb(230,230,230);
+	font-family: 'Cabin', sans-serif;
+	line-height: 170%;
+}
+
+.players {
+	border: 0;
 }
 
 h3 {
 	font-family: 'Cabin', sans-serif;
 	font-weight: 400;
 	font-size: 1.35em;
+	margin-bottom: 10px;
 }
 
 .logo {
@@ -89,6 +96,10 @@ h3 {
 	padding: 0;
 	border-right: 1px solid #abb1a9;
 	height: 100%;
+}
+
+.feed i {
+	font-style: italic;
 }
 
 .map {
