@@ -47,22 +47,10 @@
 
 	 var map;
 	 var coords;
-	 var symbol;
-	 var point;
-	 var layer;
-	 var graphic;
-	 var symbol2;
-	 var point2;
-	 var layer2;
-	 var graphic2;
-	 var symbol3;
-	 var point3;
-	 var layer3;
-	 var graphic3;
-	 var symbol4;
-	 var point4;
-	 var layer4;
-	 var graphic4;
+	 var symbol = {};
+	 var point = {};
+	 var layer = {};
+	 var graphic = {};
 	 var myBarChart;
 	 var ctx;
        
@@ -79,7 +67,9 @@
         map.on("load", addFeatureLayer);
 
         map.on("click", function(event){
-        	layer.remove(graphic);
+        	if("username" in layer){
+        	layer[username].remove(graphic[username]);
+        	}
         	coords = esri.geometry.webMercatorToGeographic(event.mapPoint);
 
         	$.ajax({
@@ -111,20 +101,26 @@
         	}).done(function(res){
         		console.log(res);
         		data.datasets[0].data = [res['Taimur'].money, res['Lukas'].money, res['Josh'].money, res['Lewis'].money];
-        		console.log(data.datasets[0].data);
         		ctx = document.getElementById("myChart").getContext("2d");
 				myBarChart = new Chart(ctx).Bar(data);
 
-				for(var username in ['Taimur','Lukas','Josh','Lewis']){
+				['Taimur','Lukas','Josh','Lewis'].forEach(function(username2){
 
-					var	coords = [res[username].pos.slice(-1)[0][0], res[username].pos.slice(-1)[0][1]];
+					console.log(username2);
 
-					point[username] = new esri.geometry.Point(coords[0],coords[1]);
-		        	graphic[username] = new esri.Graphic(point[username], symbol[username]);
-		        	layer.add(graphic[username]);
-					map.addLayer(layer[username]);
+					var len = res[username2].pos.length;
+					var	coords2 = res[username2].pos[len-1].reverse();
 
-				}
+					console.log(coords2);
+
+		        		layer[username2].remove(graphic[username2]);
+		        	
+					point[username2] = new esri.geometry.Point(coords2[0],coords2[1]);
+		        	graphic[username2] = new esri.Graphic(point[username2], symbol[username2]);
+		        	layer[username2].add(graphic[username2]);
+					map.addLayer(layer[username2]);
+
+				});
 
         	});
 
