@@ -105,7 +105,7 @@ app.get('/position', function(req, res) {
         player.game_over = true;
         for (var s in streets) {
           if (streets[s] === username) {
-            street[s] = undefined;
+            streets[s] = undefined;
           }
         }
         return res.jsonp({
